@@ -1,0 +1,74 @@
+*, *::after, *::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+    font-size: 1.2rem;
+}
+
+
+.options_container {
+    width: 500px;
+    height: 80px;
+    background-color: limegreen;
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    margin: 1em 0;
+}
+
+.destroyer {
+    background-color: black;
+}
+
+.submarine {
+    background-color: blue;
+}
+
+.cruiser {
+    background-color: yellow;
+}
+
+.carrier {
+    background-color: orange;
+}
+
+.battleship {
+    background-color: grey;
+}
+
+.destroyer_preview {
+    width: 20px;
+    height: 10px;
+    margin: 3px;
+
+}
+
+.submarine_preview {
+    width: 30px;
+    height: 10px;
+    margin: 3px;
+}
+
+.cruiser_preview {
+    width: 30px;
+    height: 10px;
+    margin: 3px;
+}
+
+
+.carrier_preview {
+    width: 50px;
+    height: 10px;
+    margin: 3px;
+}
+
+
+.battleship_preview {
+    width: 40px;
+    height: 10px;
+    margin: 3px;
+}
