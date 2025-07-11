@@ -1,12 +1,32 @@
 *, *::after, *::before {
-    margin: 0;
-    padding: 0;
+    /* margin: 0;
+    padding: 0; */
     box-sizing: border-box;
 }
 
 
 body {
     font-size: 1.2rem;
+}
+
+.game_board {
+    width: 200px;
+    height: 200px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#gamesboards_container {
+    display: flex;
+    gap: 2em;
+    justify-content: space-between;
+    max-width: 500px;
+}
+
+.block {
+    width: 20px;
+    height: 20px;
+    border: 1px solid black;
 }
 
 
