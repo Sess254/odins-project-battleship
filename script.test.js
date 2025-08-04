@@ -49,4 +49,6 @@ describe('GameBoard', () => {
         board.placeShip(ship, [[4,0,],[4,1],[4,2]])
         expect(board.ships.length).toBe(2)
     })
+
+    
 })
