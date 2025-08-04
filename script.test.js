@@ -1,5 +1,4 @@
-import {Ship} from './script'
-
+import {Ship, GameBoard} from './script'
 
 describe('Ship', ()=> {
         let ship
@@ -9,7 +8,7 @@ describe('Ship', ()=> {
         })
 
         test('Initialises ship with corect properties', ()=> {
-            expect(ship.name).toBe('submarine')
+            expect(ship.type).toBe('submarine')
             expect(ship.length).toBe(3)
         })
 
@@ -35,4 +34,19 @@ describe('Ship', ()=> {
             expect(ship.hits).toBe(3)
             expect(ship.sunk).toBe(true)
         })
+})
+
+describe('GameBoard', () => {
+    let ship, board
+
+    beforeEach(() => {
+        board = new GameBoard()
+        ship = new Ship('submarine', 3)
+    })
+
+    test('places ships correcetly', () => {
+        board.placeShip(ship, [[0,0], [0,1], [0,2]])
+        board.placeShip(ship, [[4,0,],[4,1],[4,2]])
+        expect(board.ships.length).toBe(2)
+    })
 })
