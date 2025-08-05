@@ -1,55 +1,94 @@
 class Ship {
-    constructor(type, length) {
-        this.type = type
+    constructor(length) {
         this.length = length
         this.hits = 0
-        this.sunk = false
     }
 
     hit() {
         if (this.hits < this.length) {
-            this.hits += 1
-            this.checkIfSunk()
+            this.hits++
         }
     }
 
-    checkIfSunk() {
-        if (this.hits >= this.length) {
-            this.sunk = true
-        }
+    isSunk() {
+        return this.hits >= this.length
     }
 
 }
 
 class GameBoard {
-    constructor(size = 10) {
-        this.size = size
+    constructor() {
+        this.board = Array(10).fill(null).map(() => Array(10).fill(null))
         this.ships = []
-        this.missedAttacks = []
-        this.successfullHits = []
+        this.missedAttacks = new Set()
+        this.hitAttacks = new Set()
+    }
+
+    placeShip(ship, x, y, orientation = "horizontal" ) {
+        if (!this.canPlaceShip(ship.length, x, y, orientation )) {
+            return false
+        }
+
+        const coordinates = []
+        for (let i = 0; i < ship.length; i++) {
+            const newX = orientation === 'horizontal' ? x + i : x
+            const newY = orientation === 'vertical' ? y + i : y
+            this.board[newY][newX] = ship
+            coordinates.push([[newX, newY]])
+        }
+
+        this.ships.push( {ship, coordinates} )
+        return true
+    }
+
+
+    canPlaceShip(length, x, y, orientation) {
+        if (orientation === 'horizontal') {
+            if (x + length > 10 || y >= 10) return false
+            for (let i = 0; i < length; i++) {
+                if(this.board[y][x + i] !== null) return false
+            }
+        } else {
+            if (y + length > 10 || x >= 10) return false
+            for (let i = 0; i < length; i++) {
+                if(this.board[y + i][x] !== null) return false
+            }
+        }
+
+        return true
 
     }
 
-    placeShip(ship, positions) {
-        const isWithinBounds = positions.every(([x, y]) => 
-            x >= 0 && x < this.size && y >= 0 && y < this.size
-        )
-
-        if (!isWithinBounds) {
-            throw new Error('Ship placement is out of bounds');
+    receiveAttack(x, y) {
+        const key = `${x}, ${y}`
+        if (this.missedAttacks.has(key) || this.hitAttacks.has(key)) {
+            return { alreadyAttacked: true }
         }
 
-        const isOverlapping = this.ships.some(({positions: existing}) => 
-            existing.some(pos => positions.some(p => p[0] === pos[0] && p[1] === pos[1]))
-        )
+        const ship = this.board[y][x]
 
-        if (isOverlapping) {
-            throw new Error('Ship placement overlaps')
-            
+        if (ship) {
+            ship.hit()
+            this.hitAttacks.add(key)
+            return { hit: true, ship, sunk: ship.isSunk() }
+        } else {
+            this.missedAttacks.add(key)
+            return { hit: false }
         }
-        this.ships.push( {ship, positions} )
+    }
+
+    allShipsSunk() {
+        return this.ships.every(shipData => shipData.ship.isSunk())
+    }
+
+    reset() {
+        this.board = Array(10).fill(null).map(() => Array(10).fill(null))
+        this.ships = []
+        this.hitAttacks.clear()
+        this.missedAttacks.clear()
     }
 }
+
 
 
 export{Ship, GameBoard}

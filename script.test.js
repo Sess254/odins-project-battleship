@@ -4,51 +4,92 @@ describe('Ship', ()=> {
         let ship
 
         beforeEach(() => {
-            ship = new Ship("submarine", 3) 
+            ship = new Ship(3) 
         })
 
         test('Initialises ship with corect properties', ()=> {
-            expect(ship.type).toBe('submarine')
             expect(ship.length).toBe(3)
+            expect(ship.hits).toBe(0)
         })
 
-        test('registers a hit', () => {
+        test('registers hits properly', () => {
             ship.hit()
-            expect(ship.hits).toBe(1)
-            expect(ship.sunk).toBe(false)
+            ship.hit()
+            expect(ship.hits).toBe(2)
         })
 
-        test('ship sinks after enough hits', ()=> {
-            for (let i = 0; i < 3; i++) {
-                ship.hit()
-            }
-  
-            expect(ship.hits).toBe(3)
-            expect(ship.sunk).toBe(true)
+        test('ship does not sink when not fully hit', ()=> {
+            ship.hit()
+            ship.hit()
+            expect(ship.isSunk()).toBe(false)
         })
 
-        test('ship does not resgiter more hits than its length', () =>{
-            for (let i = 0; i < 5; i++) {
+        test('ship sinks when it receives enough hits', ()=> {
+            for (let i = 0; i < ship.length; i++) {
                 ship.hit()
             }
-            expect(ship.hits).toBe(3)
-            expect(ship.sunk).toBe(true)
+            expect(ship.isSunk()).toBe(true)
         })
 })
 
 describe('GameBoard', () => {
-    let ship, board
+    let ship
+    let gameBoard
 
     beforeEach(() => {
-        board = new GameBoard()
-        ship = new Ship('submarine', 3)
+        ship = new Ship(3)
+        gameBoard = new GameBoard()
     })
 
-    test('places ships correcetly', () => {
-        board.placeShip(ship, [[0,0], [0,1], [0,2]])
-        board.placeShip(ship, [[4,0,],[4,1],[4,2]])
-        expect(board.ships.length).toBe(2)
+    test('can place ships horizonatally', () => {
+        const result = gameBoard.placeShip(ship, 0, 0, 'horizontal')
+        expect(result).toBe(true)
+        expect(gameBoard.board[0][0]).toBe(ship)
+        expect(gameBoard.board[0][1]).toBe(ship)
+        expect(gameBoard.board[0][2]).toBe(ship)
     })
 
-    
+    test('can ships be placed vertwicaly', ()=> {
+        const result = gameBoard.placeShip(ship, 0, 0, 'vertical')
+        expect(result).toBe(true)
+        expect(gameBoard.board[0][0]).toBe(ship)
+        expect(gameBoard.board[1][0]).toBe(ship)
+        expect(gameBoard.board[2][0]).toBe(ship)
+    })
+
+    test('ship cannot be placed out of bounds', () => {
+        const result = gameBoard.placeShip(ship, 8, 0, 'horizontal')
+        expect(result).toEqual(false)
+    })
+
+    test('Gameboard recieveAttack hits ships', ()=> {
+        gameBoard.placeShip(ship, 0, 0, 'horizontal')
+        const result = gameBoard.receiveAttack(0, 0)
+        expect(result.hit).toBe(true)
+        expect(result.ship).toBe(ship)
+        expect(ship.hits).toBe(1)
+    })
+
+    test('gameboard receives missed empty cells', () => {
+        const result = gameBoard.receiveAttack(5, 5)
+        expect(result.hit).toBe(false)
+        expect(gameBoard.missedAttacks).toEqual(new Set(['5, 5']))
+
+    })
+
+    test('Gameboard allSunkShips returns false with unsunk ships', ()=> {
+        gameBoard.placeShip(ship, 0, 0, 'horizontal')
+        const result = gameBoard.receiveAttack(0, 0)
+        expect(result.hit).toBe(true)
+        expect(result.ship).toBe(ship)
+        expect(ship.hits).toBe(1)
+    })
+
+    test('GameBoard returns true when a ship is sunk', ()=> {
+        gameBoard.placeShip(ship, 0, 0, 'horizontal')
+        ship.hit()
+        ship.hit()
+        ship.hit()
+        expect(gameBoard.allShipsSunk()).toBe(true)
+    })
 })
