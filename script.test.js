@@ -1,4 +1,4 @@
-import {Ship, GameBoard} from './script'
+import {Ship, GameBoard, Player} from './script'
 
 describe('Ship', ()=> {
         let ship
@@ -91,5 +91,21 @@ describe('GameBoard', () => {
         ship.hit()
         ship.hit()
         expect(gameBoard.allShipsSunk()).toBe(true)
+    })
+})
+
+describe('Player', ()=> {
+    test('Player has gameboard', ()=> {
+        const player = new Player()
+        const board = new GameBoard()
+        expect(player.gameboard).toEqual(board)
+    })
+
+    test('Computer makes random moves', ()=> {
+        const computer = new Player(true)
+        const enemyBoard = new GameBoard()
+        const result = computer.makeMove(enemyBoard)
+        expect(result).toBe(result)
+        expect(result.hit).toBe(false)
     })
 })

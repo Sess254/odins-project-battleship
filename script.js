@@ -89,6 +89,44 @@ class GameBoard {
     }
 }
 
+class Player {
+    constructor(isComputer = false) {
+        this.gameboard = new GameBoard()
+        this.isComputer = isComputer
+        this.availableMoves = []
+        if (isComputer) {
+            this.initializeAvailableMoves()
+        }
+    }
+
+    initializeAvailableMoves() {
+        this.availableMoves = []
+        for (let x = 0; x < 10; x++) {
+            for (let y = 0; y < 10; y++) {
+                this.availableMoves.push([x, y])
+            }
+        }
+    }
+
+    makeMove(enemyGameBoard) {
+        if (!this.isComputer || this.availableMoves.length === 0) {
+            return null
+        }
+
+        const randomIndex = Math.floor(Math.random() * this.availableMoves.length)
+        const [x, y] = this.availableMoves.splice(randomIndex, 1)[0]
+
+        return enemyGameBoard.receiveAttack(x, y)
+    }
+
+    reset() {
+        this.gameboard.reset()
+        if (this.isComputer) {
+            this.initializeAvailableMoves()
+        }
+    }
+}
 
 
-export{Ship, GameBoard}
+
+export{Ship, GameBoard, Player}
