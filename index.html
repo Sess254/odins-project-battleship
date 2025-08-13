@@ -3,11 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>⚓ Battleship Game ⚓</title>
     <link rel="stylesheet" href="./styles.css">
-    <script src="./script.js" defer></script>
+    
 </head>
 <body>
+    <header>⚓ Battleship Game ⚓</header>
+
+    <main>
+        <div class="game-status" id="gameStatus">
+            Place your ships to start the game!
+        </div>
+
+        <div class="game-container">
+            <div class="player-section">
+                <h2 class="player-title">Your Fleet</h2>
+                <div class="ship-placement" id="shipPlacement">
+                    <div class="ship-controls">
+                        <select id="shipType">
+                            <option value="5">Carrier (5)</option>
+                            <option value="4">Battleship (4)</option>
+                            <option value="3">Cruiser (3)</option>
+                            <option value="3">Submarine (3)</option>
+                            <option value="2">Destroyer (2)</option>
+                        </select>
+                        <select  id="orientation">
+                            <option value="horizontal">Horizontal</option>
+                            <option value="vertical">Vertical</option>
+                        </select>
+                        <button id="randomButton">Random Placement</button>
+                        <button id="startButton" disabled>Start Game</button>
+                    </div>
+                    <div id="placementStatus">Click on the grid to place your Carrier (5 cells)</div>
+                </div>
+                <div class="gameboard" id="playerBoard"></div>
+            </div>
+
+            <div class="player-section">
+                <h2 class="player-title">Enemy Waters</h2>
+                <div class="controls">
+                    <button id="resetButton">New Game</button>
+                </div>
+                <div class="gameboard computer" id="computerBoard"></div>
+            </div>
+        </div>
+    </main>
     
 </body>
+<script src="./script.js" type="module"></script>
 </html>

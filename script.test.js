@@ -73,7 +73,7 @@ describe('GameBoard', () => {
     test('gameboard receives missed empty cells', () => {
         const result = gameBoard.receiveAttack(5, 5)
         expect(result.hit).toBe(false)
-        expect(gameBoard.missedAttacks).toEqual(new Set(['5, 5']))
+        expect(gameBoard.missedAttacks).toEqual(new Set(['5,5']))
 
     })
 
